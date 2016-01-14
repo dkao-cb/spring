@@ -717,3 +717,11 @@ class WorkloadGen(object):
             time.sleep(self.timer)
             self.shutdown_event.set()
         self.wait_for_all_workers()
+
+
+class PickleLoader(object):
+    """
+    This class downloads files filled with multiple pickle objects and load the
+    fields to the KV store of Couchbase.
+    """
+    pass
