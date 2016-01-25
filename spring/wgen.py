@@ -83,7 +83,13 @@ class Worker(object):
 
         host, port = self.ts.node.split(':')
 
-        if self.ts.proxyPort == None:
+        # Only FTS uses proxyPort and authless bucket right now.
+        # Instead of jumping hoops to specify proxyPort in target
+        # iterator/settings, which only passes down very specific attributes,
+        # just detect fts_settings instead. The following does not work with
+        # authless bucket. FTS's pickle worker does its own Couchbase.connect
+        if not (hasattr(self.ws, "fts_settings") and hasattr(
+            self.ws.fts_settings, "doc_database_url")):
             # default sasl bucket
             self.init_db({'bucket': self.ts.bucket, 'host': host, 'port': port,
                           'username': self.ts.bucket,
